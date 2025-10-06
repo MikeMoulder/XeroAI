@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XeroAi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dot-pulse {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .dot-pulse:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .dot-pulse:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .theme-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .theme-btn:active {
+            transform: translateY(0);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .send-btn:not(:disabled):hover {
+            transform: translateY(-1px);
+        }
+
+        .send-btn:not(:disabled):active {
+            transform: translateY(0);
+        }
+
+        /* Light theme */
+        .light {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .light .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .light .api-badge {
+            background: #f5f5f5;
+            border: 1px solid #e5e5e5;
+            color: #000000;
+            border-radius: 16px;
+        }
+
+        .light .api-badge span {
+            color: #737373;
+        }
+
+        .light .input-container {
+            background: #ffffff;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .light .input-wrapper {
+            background: #f5f5f5;
+            border: 1px solid #e5e5e5;
+            border-radius: 20px;
+        }
+
+        .light textarea {
+            color: #000000;
+        }
+
+        .light textarea::placeholder {
+            color: #a3a3a3;
+        }
+
+        .light .send-btn {
+            background: #000000;
+            color: #ffffff;
+            border-radius: 14px;
+        }
+
+        .light .theme-btn {
+            background: #f5f5f5;
+            border: 1px solid #e5e5e5;
+            color: #000000;
+            border-radius: 14px;
+        }
+
+        .light .message-assistant-bubble {
+            background: #f5f5f5;
+            border: 1px solid #e5e5e5;
+            color: #000000;
+            border-radius: 20px;
+        }
+
+        .light .message-user-bubble {
+            background: #000000;
+            color: #ffffff;
+            border-radius: 20px;
+        }
+
+        .light .assistant-icon {
+            background: #000000;
+            color: #ffffff;
+            border-radius: 14px;
+        }
+
+        .light .loading-bubble {
+            background: #f5f5f5;
+            border: 1px solid #e5e5e5;
+            border-radius: 20px;
+        }
+
+        .light .loading-dot {
+            background: #737373;
+        }
+
+        /* Dark theme */
+        .dark {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .dark .header {
+            background: #000000;
+            border-bottom: 1px solid #262626;
+        }
+
+        .dark .api-badge {
+            background: #171717;
+            border: 1px solid #262626;
+            color: #ffffff;
+            border-radius: 16px;
+        }
+
+        .dark .api-badge span {
+            color: #737373;
+        }
+
+        .dark .input-container {
+            background: #000000;
+            border-top: 1px solid #262626;
+        }
+
+        .dark .input-wrapper {
+            background: #171717;
+            border: 1px solid #262626;
+            border-radius: 20px;
+        }
+
+        .dark textarea {
+            color: #ffffff;
+        }
+
+        .dark textarea::placeholder {
+            color: #525252;
+        }
+
+        .dark .send-btn {
+            background: #ffffff;
+            color: #000000;
+            border-radius: 14px;
+        }
+
+        .dark .theme-btn {
+            background: #171717;
+            border: 1px solid #262626;
+            color: #ffffff;
+            border-radius: 14px;
+        }
+
+        .dark .message-assistant-bubble {
+            background: #171717;
+            border: 1px solid #262626;
+            color: #ffffff;
+            border-radius: 20px;
+        }
+
+        .dark .message-user-bubble {
+            background: #ffffff;
+            color: #000000;
+            border-radius: 20px;
+        }
+
+        .dark .assistant-icon {
+            background: #ffffff;
+            color: #000000;
+            border-radius: 14px;
+        }
+
+        .dark .loading-bubble {
+            background: #171717;
+            border: 1px solid #262626;
+            border-radius: 20px;
+        }
+
+        .dark .loading-dot {
+            background: #737373;
+        }
+
+        /* Code blocks styling */
+        .code-block-container {
+            position: relative;
+            margin: 12px 0;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 12px 12px 0 0;
+            font-size: 12px;
+        }
+
+        .light .code-header {
+            background: #e5e5e5;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+        }
+
+        .dark .code-header {
+            background: #262626;
+            border: 1px solid #404040;
+            border-bottom: none;
+        }
+
+        .code-language {
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .copy-code-btn {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: none;
+        }
+
+        .light .copy-code-btn {
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid #d4d4d4;
+        }
+
+        .dark .copy-code-btn {
+            background: #171717;
+            color: #ffffff;
+            border: 1px solid #404040;
+        }
+
+        .copy-code-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .copy-code-btn:active {
+            transform: translateY(0);
+        }
+
+        pre {
+            margin: 0 !important;
+            border-radius: 0 0 12px 12px !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 13px !important;
+            line-height: 1.6 !important;
+        }
+
+        .light pre {
+            background: #f5f5f5 !important;
+            border: 1px solid #d4d4d4 !important;
+            border-top: none !important;
+        }
+
+        .dark pre {
+            background: #171717 !important;
+            border: 1px solid #404040 !important;
+            border-top: none !important;
+        }
+
+        pre code {
+            background: transparent !important;
+            padding: 16px !important;
+            display: block;
+            overflow-x: auto;
+        }
+
+        /* Inline code */
+        code:not(pre code) {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        .light code:not(pre code) {
+            background: #e5e5e5;
+            color: #000000;
+        }
+
+        .dark code:not(pre code) {
+            background: #262626;
+            color: #ffffff;
+        }
+
+        /* Copy button for messages */
+        .message-copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 6px;
+            border-radius: 8px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.15s;
+            border: none;
+        }
+
+        .message-assistant-bubble:hover .message-copy-btn {
+            opacity: 1;
+        }
+
+        .light .message-copy-btn {
+            background: #ffffff;
+            border: 1px solid #d4d4d4;
+        }
+
+        .dark .message-copy-btn {
+            background: #000000;
+            border: 1px solid #404040;
+        }
+
+        .message-copy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Typewriter cursor */
+        .typewriter-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: currentColor;
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+        }
+
+        /* Markdown formatting */
+        .message-content h1,
+        .message-content h2,
+        .message-content h3,
+        .message-content h4,
+        .message-content h5,
+        .message-content h6 {
+            font-weight: 600;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .message-content h1 { font-size: 1.875rem; }
+        .message-content h2 { font-size: 1.5rem; }
+        .message-content h3 { font-size: 1.25rem; }
+        .message-content h4 { font-size: 1.125rem; }
+        .message-content h5 { font-size: 1rem; }
+        .message-content h6 { font-size: 0.875rem; }
+
+        .message-content p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .message-content strong {
+            font-weight: 600;
+        }
+
+        .message-content em {
+            font-style: italic;
+        }
+
+        .message-content ul,
+        .message-content ol {
+            margin: 12px 0;
+            padding-left: 24px;
+        }
+
+        .message-content ul {
+            list-style-type: disc;
+        }
+
+        .message-content ol {
+            list-style-type: decimal;
+        }
+
+        .message-content li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+
+        .message-content blockquote {
+            border-left: 3px solid;
+            padding-left: 16px;
+            margin: 12px 0;
+            font-style: italic;
+        }
+
+        .light .message-content blockquote {
+            border-color: #d4d4d4;
+            color: #525252;
+        }
+
+        .dark .message-content blockquote {
+            border-color: #404040;
+            color: #a3a3a3;
+        }
+
+        .message-content a {
+            text-decoration: underline;
+            transition: opacity 0.15s;
+        }
+
+        .message-content a:hover {
+            opacity: 0.7;
+        }
+
+        .light .message-content a {
+            color: #000000;
+        }
+
+        .dark .message-content a {
+            color: #ffffff;
+        }
+
+        .message-content hr {
+            margin: 16px 0;
+            border: none;
+            height: 1px;
+        }
+
+        .light .message-content hr {
+            background: #e5e5e5;
+        }
+
+        .dark .message-content hr {
+            background: #262626;
+        }
+
+        .message-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+
+        .message-content th,
+        .message-content td {
+            padding: 8px 12px;
+            text-align: left;
+            border: 1px solid;
+        }
+
+        .light .message-content th,
+        .light .message-content td {
+            border-color: #e5e5e5;
+        }
+
+        .dark .message-content th,
+        .dark .message-content td {
+            border-color: #262626;
+        }
+
+        .message-content th {
+            font-weight: 600;
+        }
+
+        .light .message-content th {
+            background: #f5f5f5;
+        }
+
+        .dark .message-content th {
+            background: #171717;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Multilingual welcome animation */
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: scale(0.95); }
+            10%, 90% { opacity: 1; transform: scale(1); }
+        }
+
+        .welcome-text {
+            animation: fadeInOut 2s ease-in-out;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Active API button with glowing dot */
+        .api-active-btn {
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .api-active-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .api-active-btn:active {
+            transform: translateY(0);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        /* Character counter */
+        .char-counter {
+            font-size: 11px;
+            transition: color 0.15s;
+        }
+
+        .light .char-counter {
+            color: #737373;
+        }
+
+        .dark .char-counter {
+            color: #737373;
+        }
+
+        .char-counter.warning {
+            color: #f59e0b !important;
+            font-weight: 500;
+        }
+
+        .char-counter.limit {
+            color: #ef4444 !important;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Header -->
+    <header class="header fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <h1 class="text-xl font-semibold tracking-tight">XeroAi</h1>
+                <span class="mono text-xs opacity-50">/ ROMA</span>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <a href="https://moulders.gitbook.io/xero-ai/" target="_blank" class="api-badge api-active-btn px-4 py-2 rounded-lg flex items-center gap-2">
+                    <div class="status-dot"></div>
+                    <span class="text-sm font-medium">Docs</span>
+                </a>
+                
+                <button onclick="toggleTheme()" class="theme-btn w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-150" id="themeBtn">
+                    <svg class="w-5 h-5" id="themeIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-32">
+        <div class="max-w-3xl mx-auto px-6">
+            <!-- Welcome Screen -->
+            <div id="welcomeScreen" class="flex flex-col items-center justify-center min-h-[60vh]">
+                <div class="text-center max-w-md">
+                    <h2 class="text-4xl font-bold mb-3">
+                        <span class="welcome-text gradient-text" id="welcomeWord">Welcome</span> to XeroAi
+                    </h2>
+                    <p class="opacity-60 text-lg">Ask me anything to get started</p>
+                </div>
+            </div>
+
+            <!-- Messages Container -->
+            <div id="messagesContainer" class="space-y-6" style="display: none;"></div>
+        </div>
+    </main>
+
+    <!-- Input Area -->
+    <footer class="input-container fixed bottom-0 left-0 right-0">
+    <div class="max-w-3xl mx-auto px-6 py-6">
+        <div class="input-wrapper rounded-xl p-3 flex items-end gap-3">
+            <textarea
+                id="messageInput"
+                rows="1"
+                placeholder="Message XeroAi..."
+                maxlength="5000"
+                class="flex-1 bg-transparent px-2 py-2 max-h-32 text-[15px]"
+                onkeydown="handleKeyPress(event)"
+                oninput="autoResize(this)"
+            ></textarea>
+            <button
+                onclick="sendMessage()"
+                id="sendBtn"
+                class="send-btn w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-transform duration-150"
+                disabled
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="flex justify-end mt-2">
+            <span class="char-counter mono" id="charCounter">0 / 5000</span>
+        </div>
+    </div>
+</footer>
+
+    <script src="./key.js"></script> 
+    <script>
+        let isDark = true;
+        let lastUserMessage = null;
+        let lastAssistantMessage = null;
+        let isProcessing = false;
+
+        // Theme toggle
+        function toggleTheme() {
+            isDark = !isDark;
+            document.body.className = isDark ? 'dark' : 'light';
+            
+            const icon = document.getElementById('themeIcon');
+            if (isDark) {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+            } else {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+            }
+        }
+
+        // Auto-resize textarea
+        // Auto-resize textarea
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+            
+            const charCount = textarea.value.length;
+            const maxChars = 5000;
+            const counter = document.getElementById('charCounter');
+            const sendBtn = document.getElementById('sendBtn');
+            
+            // Update counter
+            counter.textContent = `${charCount} / ${maxChars}`;
+            
+            // Style counter based on character count
+            counter.classList.remove('warning', 'limit');
+            if (charCount >= maxChars) {
+                counter.classList.add('limit');
+            } else if (charCount >= maxChars * 0.9) { // 90% threshold
+                counter.classList.add('warning');
+            }
+            
+            // Disable send button if over limit or empty
+            sendBtn.disabled = !textarea.value.trim() || charCount > maxChars || isProcessing;
+        }
+
+        // Handle key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+        
+        // Process markdown and detect code blocks
+        function processMarkdown(content) {
+            // Configure marked options
+            marked.setOptions({
+                highlight: function(code, lang) {
+                    if (lang && hljs.getLanguage(lang)) {
+                        return hljs.highlight(code, { language: lang }).value;
+                    }
+                    return hljs.highlightAuto(code).value;
+                },
+                breaks: true,
+                gfm: true
+            });
+            
+            let html = marked.parse(content);
+            html = DOMPurify.sanitize(html);
+            
+            // Wrap code blocks with custom header
+            html = html.replace(/<pre><code class="language-(\w+)">([\s\S]*?)<\/code><\/pre>/g, function(match, lang, code) {
+                return `
+                    <div class="code-block-container">
+                        <div class="code-header">
+                            <span class="code-language mono">${lang}</span>
+                            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><code class="language-${lang}">${code}</code></pre>
+                    </div>
+                `;
+            });
+            
+            // Handle code blocks without language
+            html = html.replace(/<pre><code>([\s\S]*?)<\/code><\/pre>/g, function(match, code) {
+                return `
+                    <div class="code-block-container">
+                        <div class="code-header">
+                            <span class="code-language mono">code</span>
+                            <button class="copy-code-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><code>${code}</code></pre>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+
+        // Highlight code blocks
+        function highlightCode(element) {
+            element.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        }
+
+        // Typewriter effect
+        // Typewriter effect - simplified version
+        function typewriterEffect(element, html) {
+            // For now, just display the content immediately
+            // Typewriter effect with markdown is complex, so we'll skip it
+            element.innerHTML = html;
+            highlightCode(element);
+            
+            // Scroll to bottom after content is rendered
+            setTimeout(() => {
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 100);
+        }
+
+        // Copy code from code block
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block-container').querySelector('code');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Copy entire message
+        function copyMessage(button) {
+            const messageContent = button.nextElementSibling;
+            const text = messageContent.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                button.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                `;
+                setTimeout(() => {
+                    button.innerHTML = `
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                    `;
+                }, 2000);
+            });
+        }
+
+        // Add message to UI with typewriter effect
+        function addMessage(role, content, shouldTypewrite = false) {
+            const container = document.getElementById('messagesContainer');
+            const welcome = document.getElementById('welcomeScreen');
+            
+            welcome.style.display = 'none';
+            container.style.display = 'block';
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex gap-3 fade-in ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+
+            if (role === 'assistant') {
+                const processedContent = processMarkdown(content);
+                messageDiv.innerHTML = `
+                    <div class="flex gap-3 max-w-[80%]">
+                        <div class="assistant-icon w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <div class="message-assistant-bubble rounded-2xl px-4 py-3 relative">
+                            <button class="message-copy-btn" onclick="copyMessage(this)">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                </svg>
+                            </button>
+                            <div class="message-content text-[15px] leading-relaxed">${shouldTypewrite ? '' : processedContent}</div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(messageDiv);
+                
+                if (shouldTypewrite) {
+                    typewriterEffect(messageDiv.querySelector('.message-content'), processedContent);
+                } else {
+                    highlightCode(messageDiv);
+                }
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-user-bubble rounded-2xl px-4 py-3 max-w-[80%]">
+                        <p class="text-[15px] leading-relaxed whitespace-pre-wrap">${escapeHtml(content)}</p>
+                    </div>
+                `;
+                container.appendChild(messageDiv);
+            }
+
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Show loading indicator
+        function showLoading() {
+            const container = document.getElementById('messagesContainer');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = 'loadingIndicator';
+            loadingDiv.className = 'flex gap-3 fade-in';
+            loadingDiv.innerHTML = `
+                <div class="flex gap-3">
+                    <div class="assistant-icon w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="loading-bubble rounded-2xl px-4 py-3">
+                        <div class="flex gap-1.5">
+                            <div class="loading-dot w-2 h-2 rounded-full dot-pulse"></div>
+                            <div class="loading-dot w-2 h-2 rounded-full dot-pulse"></div>
+                            <div class="loading-dot w-2 h-2 rounded-full dot-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(loadingDiv);
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Remove loading indicator
+        function removeLoading() {
+            const loading = document.getElementById('loadingIndicator');
+            if (loading) {
+                loading.remove();
+            }
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Send message
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message || isProcessing) return;
+
+            isProcessing = true;
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+
+            // Add user message
+            addMessage('user', message);
+            
+            // Clear input
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Show loading
+            showLoading();
+
+            try {
+                // Prepare conversation context (only last interaction)
+                const messages = [
+                    {
+                        role: 'system',
+                        content: 'You are Xero, a general-purpose AI agent powered by ROMA and built by Rex. You are helpful, knowledgeable, and conversational. Keep your responses clear and concise. Attached here is a conversation flow between 2 roles, you (Xero) and the user who wants response to his query (user)'
+                    }
+                ];
+
+                if (lastAssistantMessage != '') {
+                    messages.push({
+                        role: 'User',
+                        content: lastUserMessage
+                    });
+
+                    messages.push({
+                        role: 'Xero',
+                        content: lastAssistantMessage
+                    });
+                }
+                messages.push({
+                    role: 'User',
+                    content: message
+                });
+
+                const topic = messages
+                .map(msg => `[${msg.role.toUpperCase()}]: ${msg.content}`)
+                .join('\n\n');
+
+                
+                const API_KEY = window.ROMA_API_KEY;
+                const PROXY_IP = 'https://api-sentient-roma-rex.ddnsfree.com/proxy/research'
+                const response = await fetch(PROXY_IP, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                         topic
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Remove loading
+                removeLoading();
+
+                // Add assistant response
+                const assistantResponse = data.final_output || 'No response received';
+                console.log(assistantResponse);
+                lastAssistantMessage = assistantResponse;
+                lastUserMessage = message;
+                addMessage('assistant', assistantResponse, true); // true enables typewriter effect
+
+            } catch (error) {
+                console.error('Error:', error);
+                removeLoading();
+                addMessage('assistant', 'Sorry, something went wrong. Please try again.', true);
+            } finally {
+                isProcessing = false;
+                input.focus();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('messageInput').focus();
+        });
+
+
+        // Multilingual welcome animation
+        const welcomeWords = [
+            'Welcome',    // English
+            'Bienvenido', // Spanish
+            'Bienvenue',  // French
+            'Willkommen', // German
+            'Benvenuto',  // Italian
+            'Bem-vindo',  // Portuguese
+            '欢迎',        // Chinese
+            'ようこそ',     // Japanese
+            '환영합니다',    // Korean
+            'Ekáàbò', // Yoruba
+            'مرحبا',      // Arabic
+            'स्वागत है',   // Hindi
+        ];
+
+        let welcomeIndex = 0;
+
+        function cycleWelcome() {
+            const welcomeElement = document.getElementById('welcomeWord');
+            if (welcomeElement && document.getElementById('welcomeScreen').style.display !== 'none') {
+                welcomeElement.textContent = welcomeWords[welcomeIndex];
+                welcomeIndex = (welcomeIndex + 1) % welcomeWords.length;
+                setTimeout(cycleWelcome, 2000); // Change every 2 seconds
+            }
+        }
+
+        // Start the animation when page loads
+        window.addEventListener('load', () => {
+            setTimeout(cycleWelcome, 1000); // Start after 1 second
+        });
+    </script>
+</body>
+</html>
