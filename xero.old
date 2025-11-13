@@ -155,8 +155,6 @@
             border: 1px solid #e5e5e5;
             color: #000000;
             border-radius: 20px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
         }
 
         .light .message-user-bubble {
@@ -240,8 +238,6 @@
             border: 1px solid #262626;
             color: #ffffff;
             border-radius: 20px;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
         }
 
         .dark .message-user-bubble {
@@ -636,133 +632,6 @@
             color: #ef4444 !important;
             font-weight: 600;
         }
-
-        /* Agent selector styles */
-        .agent-selector {
-            position: absolute;
-            bottom: 100%;
-            left: 0;
-            right: 0;
-            margin-bottom: 8px;
-            border-radius: 12px;
-            max-height: 200px;
-            overflow-y: auto;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            display: none;
-        }
-
-        .light .agent-selector {
-            background: #ffffff;
-            border: 1px solid #e5e5e5;
-        }
-
-        .dark .agent-selector {
-            background: #171717;
-            border: 1px solid #262626;
-        }
-
-        .agent-option {
-            padding: 12px 16px;
-            cursor: pointer;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .agent-option:first-child {
-            border-radius: 12px 12px 0 0;
-        }
-
-        .agent-option:last-child {
-            border-radius: 0 0 12px 12px;
-        }
-
-        .light .agent-option:hover,
-        .light .agent-option.selected {
-            background: #f5f5f5;
-        }
-
-        .dark .agent-option:hover,
-        .dark .agent-option.selected {
-            background: #262626;
-        }
-
-        .agent-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .light .agent-icon {
-            background: #000000;
-            color: #ffffff;
-        }
-
-        .dark .agent-icon {
-            background: #ffffff;
-            color: #000000;
-        }
-
-        .agent-info {
-            flex: 1;
-        }
-
-        .agent-name {
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .agent-description {
-            font-size: 12px;
-            opacity: 0.6;
-            margin-top: 2px;
-        }
-
-        /* Selected agent badge */
-        .selected-agent-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 10px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 500;
-            margin-right: 8px;
-        }
-
-        .light .selected-agent-badge {
-            background: #e5e5e5;
-            color: #000000;
-        }
-
-        .dark .selected-agent-badge {
-            background: #262626;
-            color: #ffffff;
-        }
-
-        .remove-agent-btn {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            transition: all 0.15s;
-        }
-
-        .light .remove-agent-btn:hover {
-            background: #d4d4d4;
-        }
-
-        .dark .remove-agent-btn:hover {
-            background: #404040;
-        }
     </style>
 </head>
 <body class="dark">
@@ -809,66 +678,33 @@
 
     <!-- Input Area -->
     <footer class="input-container fixed bottom-0 left-0 right-0">
-        <div class="max-w-3xl mx-auto px-6 py-6">
-            <div class="input-wrapper rounded-xl p-3 flex items-end gap-3 relative">
-                <!-- Agent Selector Dropdown -->
-                <div id="agentSelector" class="agent-selector">
-                    <div class="agent-option" data-agent="xerojobs" onclick="selectAgent('xerojobs')">
-                        <div class="agent-icon">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <div class="agent-info">
-                            <div class="agent-name">XeroJobs</div>
-                            <div class="agent-description">Job search and career assistant</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex-1 flex flex-col">
-                    <!-- Selected Agent Badge -->
-                    <div id="selectedAgentContainer" style="display: none;" class="mb-2">
-                        <span class="selected-agent-badge">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                            <span id="selectedAgentName">XeroJobs</span>
-                            <div class="remove-agent-btn" onclick="removeAgent()">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </div>
-                        </span>
-                    </div>
-                    
-                    <textarea
-                        id="messageInput"
-                        rows="1"
-                        placeholder="Message XeroAi..."
-                        maxlength="5000"
-                        class="w-full bg-transparent px-2 py-2 max-h-32 text-[15px]"
-                        onkeydown="handleKeyPress(event)"
-                        oninput="handleInput(this)"
-                    ></textarea>
-                </div>
-                
-                <button
-                    onclick="sendMessage()"
-                    id="sendBtn"
-                    class="send-btn w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-transform duration-150"
-                    disabled
-                >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                    </svg>
-                </button>
-            </div>
-            <div class="flex justify-end mt-2">
-                <span class="char-counter mono" id="charCounter">0 / 5000</span>
-            </div>
+    <div class="max-w-3xl mx-auto px-6 py-6">
+        <div class="input-wrapper rounded-xl p-3 flex items-end gap-3">
+            <textarea
+                id="messageInput"
+                rows="1"
+                placeholder="Message XeroAi..."
+                maxlength="5000"
+                class="flex-1 bg-transparent px-2 py-2 max-h-32 text-[15px]"
+                onkeydown="handleKeyPress(event)"
+                oninput="autoResize(this)"
+            ></textarea>
+            <button
+                onclick="sendMessage()"
+                id="sendBtn"
+                class="send-btn w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-transform duration-150"
+                disabled
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                </svg>
+            </button>
         </div>
-    </footer>
+        <div class="flex justify-end mt-2">
+            <span class="char-counter mono" id="charCounter">0 / 5000</span>
+        </div>
+    </div>
+</footer>
 
     <script src="./key.js"></script> 
     <script>
@@ -876,17 +712,6 @@
         let lastUserMessage = null;
         let lastAssistantMessage = null;
         let isProcessing = false;
-        let selectedAgent = null;
-        let selectedAgentIndex = 0;
-
-        // Available agents
-        const agents = {
-            xerojobs: {
-                name: 'XeroJobs',
-                description: 'Job search and career assistant',
-                icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
-            }
-        };
 
         // Theme toggle
         function toggleTheme() {
@@ -901,24 +726,7 @@
             }
         }
 
-        // Auto-resize textarea and handle agent selector
-        function handleInput(textarea) {
-            autoResize(textarea);
-            
-            const value = textarea.value;
-            const cursorPos = textarea.selectionStart;
-            const textBeforeCursor = value.substring(0, cursorPos);
-            
-            // Check if @ is typed
-            const atMatch = textBeforeCursor.match(/@(\w*)$/);
-            
-            if (atMatch) {
-                showAgentSelector();
-            } else {
-                hideAgentSelector();
-            }
-        }
-
+        // Auto-resize textarea
         // Auto-resize textarea
         function autoResize(textarea) {
             textarea.style.height = 'auto';
@@ -936,103 +744,19 @@
             counter.classList.remove('warning', 'limit');
             if (charCount >= maxChars) {
                 counter.classList.add('limit');
-            } else if (charCount >= maxChars * 0.9) {
+            } else if (charCount >= maxChars * 0.9) { // 90% threshold
                 counter.classList.add('warning');
             }
             
             // Disable send button if over limit or empty
             sendBtn.disabled = !textarea.value.trim() || charCount > maxChars || isProcessing;
-            updateMainPadding();
-        }
-
-        // Show agent selector
-        function showAgentSelector() {
-            const selector = document.getElementById('agentSelector');
-            selector.style.display = 'block';
-            selectedAgentIndex = 0;
-            updateSelectedOption();
-        }
-
-        // Hide agent selector
-        function hideAgentSelector() {
-            const selector = document.getElementById('agentSelector');
-            selector.style.display = 'none';
-        }
-
-        // Update selected option in dropdown
-        function updateSelectedOption() {
-            const options = document.querySelectorAll('.agent-option');
-            options.forEach((opt, idx) => {
-                opt.classList.toggle('selected', idx === selectedAgentIndex);
-            });
-        }
-
-        // Select agent
-        function selectAgent(agentId) {
-            selectedAgent = agentId;
-            
-            // Remove @ mention from textarea
-            const textarea = document.getElementById('messageInput');
-            const value = textarea.value;
-            const cursorPos = textarea.selectionStart;
-            const textBeforeCursor = value.substring(0, cursorPos);
-            const textAfterCursor = value.substring(cursorPos);
-            
-            // Remove the @mention
-            const newTextBefore = textBeforeCursor.replace(/@\w*$/, '');
-            textarea.value = newTextBefore + textAfterCursor;
-            
-            // Show selected agent badge
-            const container = document.getElementById('selectedAgentContainer');
-            const nameSpan = document.getElementById('selectedAgentName');
-            container.style.display = 'block';
-            nameSpan.textContent = agents[agentId].name;
-            
-            hideAgentSelector();
-            textarea.focus();
-            autoResize(textarea);
-        }
-
-        // Remove selected agent
-        function removeAgent() {
-            selectedAgent = null;
-            const container = document.getElementById('selectedAgentContainer');
-            container.style.display = 'none';
-            document.getElementById('messageInput').focus();
         }
 
         // Handle key press
         function handleKeyPress(event) {
-            const selector = document.getElementById('agentSelector');
-            const isVisible = selector.style.display === 'block';
-            
-            if (isVisible) {
-                if (event.key === 'ArrowDown') {
-                    event.preventDefault();
-                    const options = document.querySelectorAll('.agent-option');
-                    selectedAgentIndex = Math.min(selectedAgentIndex + 1, options.length - 1);
-                    updateSelectedOption();
-                } else if (event.key === 'ArrowUp') {
-                    event.preventDefault();
-                    selectedAgentIndex = Math.max(selectedAgentIndex - 1, 0);
-                    updateSelectedOption();
-                } else if (event.key === 'Enter') {
-                    event.preventDefault();
-                    const options = document.querySelectorAll('.agent-option');
-                    const selectedOption = options[selectedAgentIndex];
-                    if (selectedOption) {
-                        const agentId = selectedOption.getAttribute('data-agent');
-                        selectAgent(agentId);
-                    }
-                } else if (event.key === 'Escape') {
-                    event.preventDefault();
-                    hideAgentSelector();
-                }
-            } else {
-                if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault();
-                    sendMessage();
-                }
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
             }
         }
         
@@ -1090,6 +814,7 @@
         }
 
         // Typewriter effect
+        // Typewriter effect - simplified version
         function typewriterEffect(element, html) {
             // For now, just display the content immediately
             // Typewriter effect with markdown is complex, so we'll skip it
@@ -1138,7 +863,7 @@
         }
 
         // Add message to UI with typewriter effect
-        function addMessage(role, content, shouldTypewrite = false, agentName = 'XeroAi') {
+        function addMessage(role, content, shouldTypewrite = false) {
             const container = document.getElementById('messagesContainer');
             const welcome = document.getElementById('welcomeScreen');
             
@@ -1146,28 +871,26 @@
             container.style.display = 'block';
 
             const messageDiv = document.createElement('div');
-            messageDiv.className = `flex flex-col gap-1.5 fade-in ${role === 'user' ? 'items-end' : 'items-start'}`;
+            messageDiv.className = `flex gap-3 fade-in ${role === 'user' ? 'justify-end' : 'justify-start'}`;
 
             if (role === 'assistant') {
                 const processedContent = processMarkdown(content);
                 messageDiv.innerHTML = `
-                    <div class="flex gap-3 w-full max-w-[85%]">
+                    <div class="flex gap-3 max-w-[80%]">
                         <div class="assistant-icon w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                             </svg>
                         </div>
-                        <div class="message-assistant-bubble rounded-2xl px-4 py-3 relative flex-1 min-w-0">
+                        <div class="message-assistant-bubble rounded-2xl px-4 py-3 relative">
                             <button class="message-copy-btn" onclick="copyMessage(this)">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                 </svg>
                             </button>
-                            <div class="message-content text-[15px] leading-relaxed">${shouldTypewrite ?
-                '' : processedContent}</div>
+                            <div class="message-content text-[15px] leading-relaxed">${shouldTypewrite ? '' : processedContent}</div>
                         </div>
                     </div>
-                    <div class="w-full max-w-[85%] pr-2 text-right text-xs mono opacity-60">${escapeHtml(agentName)}</div>
                 `;
                 
                 container.appendChild(messageDiv);
@@ -1241,18 +964,12 @@
             const sendBtn = document.getElementById('sendBtn');
             sendBtn.disabled = true;
 
-            // Store selected agent info
-            const agentUsed = selectedAgent;
-            const agentName = agentUsed ? agents[agentUsed].name : 'XeroAi';
-
             // Add user message
             addMessage('user', message);
             
-            // Clear input and reset agent
+            // Clear input
             input.value = '';
             input.style.height = 'auto';
-            //removeAgent();
-            updateMainPadding();
 
             // Show loading
             showLoading();
@@ -1262,9 +979,7 @@
                 const messages = [
                     {
                         role: 'system',
-                        content: agentUsed 
-                            ? `You are ${agents[agentUsed].name}, ${agents[agentUsed].description}. You are helpful, knowledgeable, and conversational. Keep your responses clear and concise.`
-                            : 'You are Xero, a general-purpose AI agent powered by ROMA and built by Rex. You are helpful, knowledgeable, and conversational. Keep your responses clear and concise. Attached here is a conversation flow between 2 roles, you (Xero) and the user who wants response to his query (user)'
+                        content: 'You are Xero, a general-purpose AI agent powered by ROMA and built by Rex. You are helpful, knowledgeable, and conversational. Keep your responses clear and concise. Attached here is a conversation flow between 2 roles, you (Xero) and the user who wants response to his query (user)'
                     }
                 ];
 
@@ -1288,13 +1003,7 @@
                 .map(msg => `[${msg.role.toUpperCase()}]: ${msg.content}`)
                 .join('\n\n');
 
-                agentIndex = 0;
-                if (agentUsed) {
-                    agentIndex = selectedAgentIndex + 1;
-                }else{
-                    agentIndex = 0;
-                }
-
+                
                 const API_KEY = window.ROMA_API_KEY;
                 const PROXY_IP = 'https://api-sentient-roma-rex.ddnsfree.com/proxy/research'
                 const response = await fetch(PROXY_IP, {
@@ -1304,8 +1013,7 @@
                         'Authorization': `Bearer ${API_KEY}`
                     },
                     body: JSON.stringify({
-                        topic,
-                        agentIndex
+                         topic
                     })
                 });
 
@@ -1323,7 +1031,7 @@
                 console.log(assistantResponse);
                 lastAssistantMessage = assistantResponse;
                 lastUserMessage = message;
-                addMessage('assistant', assistantResponse, true, agentName);
+                addMessage('assistant', assistantResponse, true); // true enables typewriter effect
 
             } catch (error) {
                 console.error('Error:', error);
@@ -1338,25 +1046,23 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('messageInput').focus();
-            updateMainPadding();
         });
 
-        window.addEventListener('resize', updateMainPadding);
 
         // Multilingual welcome animation
         const welcomeWords = [
-            'Welcome',
-            'Bienvenido',
-            'Bienvenue',
-            'Willkommen',
-            'Benvenuto',
-            'Bem-vindo',
-            '欢迎',
-            'ようこそ',
-            '환영합니다',
-            'Ẹ káàbọ̀',
-            'مرحبا',
-            'स्वागत है',
+            'Welcome',    // English
+            'Bienvenido', // Spanish
+            'Bienvenue',  // French
+            'Willkommen', // German
+            'Benvenuto',  // Italian
+            'Bem-vindo',  // Portuguese
+            '欢迎',        // Chinese
+            'ようこそ',     // Japanese
+            '환영합니다',    // Korean
+            'Ekáàbò', // Yoruba
+            'مرحبا',      // Arabic
+            'स्वागत है',   // Hindi
         ];
 
         let welcomeIndex = 0;
@@ -1366,23 +1072,13 @@
             if (welcomeElement && document.getElementById('welcomeScreen').style.display !== 'none') {
                 welcomeElement.textContent = welcomeWords[welcomeIndex];
                 welcomeIndex = (welcomeIndex + 1) % welcomeWords.length;
-                setTimeout(cycleWelcome, 2000);
-            }
-        }
-
-        // Add this new function
-        function updateMainPadding() {
-            const main = document.querySelector('main');
-            const footer = document.querySelector('footer.input-container');
-            if (main && footer) {
-                // We add 16px (1rem) of extra space for breathing room
-                main.style.paddingBottom = `${footer.offsetHeight + 16}px`;
+                setTimeout(cycleWelcome, 2000); // Change every 2 seconds
             }
         }
 
         // Start the animation when page loads
         window.addEventListener('load', () => {
-            setTimeout(cycleWelcome, 1000);
+            setTimeout(cycleWelcome, 1000); // Start after 1 second
         });
     </script>
 </body>
