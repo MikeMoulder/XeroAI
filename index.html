@@ -770,7 +770,10 @@
     <header class="header fixed top-0 left-0 right-0 z-50">
         <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <h1 class="text-xl font-semibold tracking-tight">XeroAi</h1>
+                <div class="flex items-center">
+                    <span class="text-xs font-semibold px-2 py-0.4 rounded-md bg-indigo-500 text-white">BETA</span>
+                    <h1 class="text-xl font-semibold tracking-tight ml-2">XeroAi</h1>
+                </div>
                 <span class="mono text-xs opacity-50">/ ROMA</span>
             </div>
             
@@ -845,7 +848,7 @@
                     <textarea
                         id="messageInput"
                         rows="1"
-                        placeholder="Message XeroAi..."
+                        placeholder="Message XeroAi... (Tip: use @ to use an agent)"
                         maxlength="5000"
                         class="w-full bg-transparent px-2 py-2 max-h-32 text-[15px]"
                         onkeydown="handleKeyPress(event)"
